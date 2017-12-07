@@ -36,11 +36,13 @@ public class Board {
         this.boardCells = boardCells;
     }
 
-    public void setCell(Cell cell){
-        boardCells[cell.getPosX()][cell.getPosY()] = cell;
+    public void setCell(Integer X, Integer Y, Boolean state){
+        Cell cell = new Cell();
+        cell.setLive(state);
+        boardCells[X][Y] = cell;
     }
 
-    public Cell getCell(Cell cell){
-        return boardCells[cell.getPosX()][cell.getPosY()];
+    public Cell getCell(Integer X, Integer Y){
+        return boardCells[X][Y];
     }
 }

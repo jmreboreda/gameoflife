@@ -4,73 +4,77 @@ import java.util.*;
 
 public class Manager {
 
-    private final Integer DEAD_FOR_LIVE = 3;
-
     private Board board;
-    private final Integer boardRow = 90;
-    private final Integer boardColumn = 90;
-    private final Integer initialSeeds = boardRow*boardColumn;
-    //private Cell[][] boardCells = new Cell[boardRow][boardColumn];
+    private Integer initialSeeds;
+    private Board destiny;
 
 
     public void init(Board board){
         this.board = board;
-        board.setBoardRow(boardRow);
-        board.setBoardColumn(boardColumn);
+        initialSeeds = board.getBoardRow()*board.getBoardColumn();
         initialPlanting(initialSeeds);
-        printBoard();
-        try {
-            setNextStateOfBoard();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        destiny = new Board(board.getBoardRow(), board.getBoardColumn());
+        while(1 < 2) {
+            printBoard();
+            try {
+                setNextStateOfBoard();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void initialPlanting(Integer initialSeeds){
         Random random = new Random();
-        for(Integer i = 0; i < boardRow; i++){
-            for(Integer j = 0; j < boardColumn; j++){
-                Cell cell = new Cell(i, j);
-                cell.setLive(false);
+        for(Integer i = 0; i < board.getBoardRow(); i++){
+            for(Integer j = 0; j < board.getBoardColumn(); j++){
+                Boolean state = false;
+                Cell cell = new Cell();
+                cell.setLive(state);
                 if(initialSeeds > 0) {
                     int randomNum = random.nextInt(100);
                     if (randomNum > 25 && randomNum < 50) {
-                        cell.setLive(true);
+                        state = true;
+                        cell.setLive(state);
                         initialSeeds--;
                     }
                 }
-                board.setCell(cell);
+                board.setCell(i, j, state);
             }
         }
     }
 
 
     private void setNextStateOfBoard() throws InterruptedException {
-        for(int i = 1; i < boardRow - 1; i++ ){
-            for(int j = 1; j < boardColumn - 1; j++ ){
-                Cell cell = new Cell(i, j);
-                Map<String, Integer> neighbors = computeNeighbors(board.getCell(cell));
+        for(int i = 1; i < board.getBoardRow() - 1; i++ ){
+            for(int j = 1; j < board.getBoardColumn() - 1; j++ ){
+                Cell cell = new Cell();
+                Map<String, Integer> neighbors = computeNeighbors(i, j);
                 //Thread.sleep(250);
-                System.out.println("Cell ["+ i + "-" +  j + "]" + " --> "+ neighbors);
+                //System.out.println("Cell ["+ i + "-" +  j + "]" + " --> "+ neighbors);
+                computeNewState(i, j, neighbors);
             }
         }
-
-
+        board.setBoardCells(destiny.getBoardCells());
     }
 
-    private Map<String, Integer> computeNeighbors(Cell cell){
+    private Map<String, Integer> computeNeighbors(Integer X, Integer Y){
         Map<String,Integer> neighbors = new HashMap<>();
+        if(X == 0 && Y == 0){
+
+        }
+        if(X == 0 && Y > 0){
+
+        }
+
         Integer lives = 0;
         Integer dead = 0;
-        Integer x = cell.getPosX();
-        Integer y =cell.getPosY();
-        for(int i= x-1; i < x + 2; i++ ){
-            for(int j= y-1; j < y + 2; j++ ){
-                if(i == x && j == y){
+        for(int i= X-1; i < X + 2; i++ ){
+            for(int j= Y-1; j < Y + 2; j++ ){
+                if(i == X && j == Y){
                     continue;
                 }
-                Cell myCell = new Cell(i, j);
-                if(board.getCell(myCell).isLive()){
+                if(board.getCell(i, j).isLive()){
                     lives++;
                 }else{
                     dead++;
@@ -83,20 +87,38 @@ public class Manager {
         return neighbors;
     }
 
+    private void computeNewState(Integer X, Integer Y, Map neighbors){
+        if(board.getCell(X, Y).isLive()){
+            if(neighbors.get("LIVES").toString().equals("2") ||
+                    neighbors.get("LIVES").toString().equals("3")){
+                return;
+            }else{
+                destiny.setCell(X, Y, false);
+            }
+        }else {
+            if (neighbors.get("LIVES").toString().equals("3")) {
+                destiny.setCell(X, Y, true);
+            } else {
+                return;
+            }
+        }
+    }
+
     private void printBoard(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
         int count = 0;
         String state;
-        for(int i = 0; i < boardRow; i++) {
-            for (int j = 0; j < boardColumn; j++) {
-                Cell myCell = new Cell(i, j);
-                if (board.getCell(myCell).isLive()) {
+        for(int i = 0; i < board.getBoardRow(); i++) {
+            for (int j = 0; j < board.getBoardColumn(); j++) {
+                if (board.getCell(i,j).isLive()) {
                     state = "*";
                 } else {
                     state = "-";
                 }
                 System.out.print("" + state + "");
                 count++;
-                if (count == boardRow) {
+                if (count == board.getBoardRow()) {
                     System.out.print("\n");
                     count = 0;
                 }
