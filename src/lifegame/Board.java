@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class Board {
 
-    private Integer boardColumn;
     private Integer boardRow;
+    private Integer boardColumn;
 
     public final Point CUL;
     public final Point CUR;
@@ -16,13 +16,13 @@ public class Board {
 
     private Map<Point, Cell> boardCells = new HashMap<>();
 
-    public Board(Integer boardColumn, Integer boardRow) {
-        this.boardColumn = boardColumn;
+    public Board(Integer boardRow, Integer boardColumn) {
         this.boardRow = boardRow;
+        this.boardColumn = boardColumn;
         this.CUL = new Point(0, 0);
-        this.CUR = new Point(0, this.getBoardRow() -1 );
-        this.CBL = new Point(this.getBoardColumn() - 1, 0 );
-        this.CBR = new Point(this.getBoardColumn() - 1, this.getBoardRow() -1 );
+        this.CUR = new Point(0, this.getBoardColumn() -1 );
+        this.CBL = new Point(this.getBoardRow() - 1, 0 );
+        this.CBR = new Point(this.getBoardRow() - 1, this.getBoardColumn() -1 );
         this.fillWithFalse();
     }
 
