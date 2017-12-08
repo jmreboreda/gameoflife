@@ -61,6 +61,8 @@ public class Board {
 
     }
 
+
+
     private void fillWithFalse(){
         for(int i = 0; i < boardRow; i++) {
             for (int j = 0; j < boardColumn; j++) {
