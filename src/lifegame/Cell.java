@@ -4,7 +4,7 @@ public class Cell {
 
     private Boolean live;
 
-    public Boolean isLive() {
+    public Boolean getLive() {
         return live;
     }
 

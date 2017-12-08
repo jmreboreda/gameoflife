@@ -1,15 +1,29 @@
 package lifegame;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Board {
 
-    private Integer boardRow;
     private Integer boardColumn;
-    private Cell[][] boardCells;
+    private Integer boardRow;
 
-    public Board(Integer boardRow, Integer boardColumn) {
-        this.boardRow = boardRow;
+    public final Point CUL;
+    public final Point CUR;
+    public final Point CBL;
+    public final Point CBR;
+
+    private Map<Point, Cell> boardCells = new HashMap<>();
+
+    public Board(Integer boardColumn, Integer boardRow) {
         this.boardColumn = boardColumn;
-        this.boardCells = new Cell[boardRow][boardColumn];
+        this.boardRow = boardRow;
+        this.CUL = new Point(0, 0);
+        this.CUR = new Point(0, this.getBoardRow() -1 );
+        this.CBL = new Point(this.getBoardColumn() - 1, 0 );
+        this.CBR = new Point(this.getBoardColumn() - 1, this.getBoardRow() -1 );
+        this.fillWithFalse();
     }
 
     public Integer getBoardRow() {
@@ -28,21 +42,32 @@ public class Board {
         this.boardColumn = boardColumn;
     }
 
-    public Cell[][] getBoardCells() {
+    public Map<Point, Cell> getBoardCells() {
         return boardCells;
     }
 
-    public void setBoardCells(Cell[][] boardCells) {
+    public void setBoardCells(Map<Point, Cell> boardCells) {
         this.boardCells = boardCells;
     }
 
-    public void setCell(Integer X, Integer Y, Boolean state){
+    public void setCellState(Point point, Boolean state){
         Cell cell = new Cell();
         cell.setLive(state);
-        boardCells[X][Y] = cell;
+        boardCells.put(point, cell);
     }
 
-    public Cell getCell(Integer X, Integer Y){
-        return boardCells[X][Y];
+    public Boolean getCellState(Point point){
+        return boardCells.get(point).getLive();
+
+    }
+
+    private void fillWithFalse(){
+        for(int i = 0; i < boardRow; i++) {
+            for (int j = 0; j < boardColumn; j++) {
+                Cell cell = new Cell();
+                cell.setLive(false);
+                boardCells.put(new Point(i, j), cell);
+            }
+        }
     }
 }
