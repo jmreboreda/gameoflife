@@ -20,7 +20,7 @@ public class LifeGame {
     public void init(){
         this.board = new Board(boardRow, boardColumn);
         this.swapBoard = new Board(board.getBoardRow(), board.getBoardColumn());
-        initialBoardPlanting(board.getBoardRow());
+        initialBoardPlanting(board.getBoardRow()*10);
 
         while (1 < 2) {
             System.out.print("\033[H\033[2J");
@@ -41,7 +41,7 @@ public class LifeGame {
             for(Integer col = 0; col < board.getBoardColumn(); col++){
                 if(initialSeeds > 0) {
                     int randomNum = random.nextInt(100);
-                    if (randomNum > 25 && randomNum < 50) {
+                    if (randomNum > 15 && randomNum < 75) {
                         board.setCellState(new Point(row, col), true);
                         initialSeeds--;
                     }
@@ -53,7 +53,6 @@ public class LifeGame {
     private void setNextStateOfBoard() throws InterruptedException {
         for(int row = 1; row < board.getBoardRow() - 1; row++ ){
             for(int col = 1; col < board.getBoardColumn() - 1; col++ ){
-                Cell cell = new Cell();
                 Map<String, Integer> neighbors = computeNeighbors(new Point(row, col));
                 //System.out.println("Cell ["+ row + "-" +  col + "]" + " --> "+ neighbors);
                 computeNewState(row, col, neighbors);
@@ -202,10 +201,12 @@ public class LifeGame {
                 return;
             }else{
                 swapBoard.setCellState(new Point(x, y), false);
+                return;
             }
         }else {
             if (neighbors.get("LIVES").equals(3)) {
                 swapBoard.setCellState(new Point(x, y), true);
+                return;
             } else {
                 return;
             }
@@ -232,6 +233,5 @@ public class LifeGame {
         }
         System.out.println("Iteración: " + it);
         Thread.sleep(250);
-
     }
 }
