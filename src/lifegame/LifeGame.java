@@ -61,22 +61,19 @@ public class LifeGame {
     }
 
     private void setNextStateOfBoard() throws InterruptedException {
-        for(int row = 0; row < board.getBoardColumn() - 1; row++ ){
-            for(int col = 0; col < board.getBoardRow() - 1; col++ ){
-                Map<String, Integer> neighbors = computeNeighborsAtCell(new Point(row, col));
-                //System.out.println("Cell ["+ row + "-" +  col + "]" + " --> "+ neighbors);
-                computeNewState(new Point(row, col), neighbors);
+        for(int row = 0; row < board.getBoardColumn(); row++ ){
+            for(int col = 0; col < board.getBoardRow(); col++ ){
+                Map<String, Integer> neighborsState = computeNeighborsStateAtCell(new Point(row, col));
+                computeNewStateAtPoint(new Point(row, col), neighborsState);
             }
         }
         board.setBoardCells(swapBoard.getBoardCells());
     }
 
-    private Map<String, Integer> computeNeighborsAtCell(Point point){
+    private Map<String, Integer> computeNeighborsStateAtCell(Point point){
         Map<String,Integer> neighborsState = new HashMap<>();
         Integer lives = 0;
         Integer dead = 0;
-        Integer row = point.x;
-        Integer col = point.y;
 
         List<Point> neighbors = new ArrayList<>();
         neighbors.add(new Point(point.x-1, point.y-1));
@@ -89,7 +86,7 @@ public class LifeGame {
         neighbors.add(new Point(point.x+1, point.y+1));
 
         for(Point myPoint : neighbors){
-            if(myPoint.x < 0 || myPoint.x > board.getBoardColumn() || myPoint.y < 0 || myPoint.y > board.getBoardRow()){
+            if(myPoint.x < 0 || myPoint.x > board.getBoardColumn() - 1 || myPoint.y < 0 || myPoint.y > board.getBoardRow() -1){
                 continue;
             }
             if(board.getCellState(myPoint)){
@@ -104,7 +101,7 @@ public class LifeGame {
         return neighborsState;
     }
 
-    private void computeNewState(Point point, Map neighbors){
+    private void computeNewStateAtPoint(Point point, Map neighbors){
         if(board.getCellState(point)){
             if(neighbors.get("LIVES").equals(2) ||
                     neighbors.get("LIVES").equals(3)){
@@ -142,130 +139,6 @@ public class LifeGame {
             }
         }
         System.out.println("Iteración: " + it);
-        Thread.sleep(125);
-    }
-
-    private Map<String, Integer> getCULNeighbors(){
-        Integer lives = 0;
-        Integer dead = 0;
-        Map<String, Integer> neighbors = new HashMap<>();
-
-        if (board.getCellState(new Point(0, 1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(1, 0))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(1, 1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(1, 2))){
-            lives++;
-        }else{
-            dead++;
-        }
-        neighbors.put("LIVES", lives);
-        neighbors.put("DEAD", dead);
-
-        return neighbors;
-    }
-
-    private Map<String, Integer> getCURNeighbors(){
-        Integer lives = 0;
-        Integer dead = 0;
-        Map<String, Integer> neighbors = new HashMap<>();
-
-        if (board.getCellState(new Point(0, boardColumn - 1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(1, boardColumn - 3))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(1, boardColumn - 2))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(1, boardColumn - 1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        neighbors.put("LIVES", lives);
-        neighbors.put("DEAD", dead);
-
-        return neighbors;
-    }
-
-    private Map<String, Integer> getCBLNeighbors(){
-        Integer lives = 0;
-        Integer dead = 0;
-        Map<String, Integer> neighbors = new HashMap<>();
-
-        if (board.getCellState(new Point(boardRow -1, 1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(boardRow -2, 0))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(boardRow -2, 1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(boardRow -2, 2))){
-            lives++;
-        }else{
-            dead++;
-        }
-        neighbors.put("LIVES", lives);
-        neighbors.put("DEAD", dead);
-
-        return neighbors;
-    }
-
-    private Map<String, Integer> getCBRNeighbors(){
-        Integer lives = 0;
-        Integer dead = 0;
-        Map<String, Integer> neighbors = new HashMap<>();
-
-        if (board.getCellState(new Point(boardRow -1, boardColumn -1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(boardRow -2, boardColumn -3))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(boardRow -2, boardColumn -2))){
-            lives++;
-        }else{
-            dead++;
-        }
-        if (board.getCellState(new Point(boardRow -2, boardColumn -1))){
-            lives++;
-        }else{
-            dead++;
-        }
-        neighbors.put("LIVES", lives);
-        neighbors.put("DEAD", dead);
-
-        return neighbors;
+        Thread.sleep(50);
     }
 }
