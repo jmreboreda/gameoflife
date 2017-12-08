@@ -9,6 +9,9 @@ public class Board {
     private Integer boardRow;
     private Integer boardColumn;
 
+    public static final Boolean LIVE = true;
+    public static final Boolean DEAD = false;
+
     public final Point CUL;
     public final Point CUR;
     public final Point CBL;
@@ -60,8 +63,6 @@ public class Board {
         return boardCells.get(point).getLive();
 
     }
-
-
 
     private void fillWithFalse(){
         for(int i = 0; i < boardRow; i++) {
