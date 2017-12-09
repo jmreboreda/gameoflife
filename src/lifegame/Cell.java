@@ -2,6 +2,9 @@ package lifegame;
 
 public class Cell {
 
+    public static final Boolean LIVE = true;
+    public static final Boolean DEAD = false;
+
     private Boolean live;
 
     public Boolean getLive() {

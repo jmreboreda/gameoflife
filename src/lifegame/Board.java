@@ -1,32 +1,22 @@
 package lifegame;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class Board {
 
     private Integer boardRow;
     private Integer boardColumn;
 
-    public static final Boolean LIVE = true;
-    public static final Boolean DEAD = false;
-
-    public final Point CUL;
-    public final Point CUR;
-    public final Point CBL;
-    public final Point CBR;
-
     private Map<Point, Cell> boardCells = new HashMap<>();
 
     public Board(Integer boardRow, Integer boardColumn) {
         this.boardRow = boardRow;
         this.boardColumn = boardColumn;
-        this.CUL = new Point(0, 0);
-        this.CUR = new Point(0, this.getBoardColumn() -1 );
-        this.CBL = new Point(this.getBoardRow() - 1, 0 );
-        this.CBR = new Point(this.getBoardRow() - 1, this.getBoardColumn() -1 );
-        this.fillWithFalse();
+        initialBoardDead();
+        fillMapWithDead();
+        initialBoardPlanting(boardRow);
     }
 
     public Integer getBoardRow() {
@@ -64,13 +54,98 @@ public class Board {
 
     }
 
-    private void fillWithFalse(){
+    public java.util.List<Point> getNeighbors(Point point) {
+        List<Point> neighbors = new ArrayList<>();
+
+        List<Point> listPoints = new ArrayList<>();
+        listPoints.add(new Point(point.x - 1, point.y - 1));
+        listPoints.add(new Point(point.x - 1, point.y));
+        listPoints.add(new Point(point.x - 1, point.y + 1));
+        listPoints.add(new Point(point.x, point.y - 1));
+        listPoints.add(new Point(point.x, point.y + 1));
+        listPoints.add(new Point(point.x + 1, point.y - 1));
+        listPoints.add(new Point(point.x + 1, point.y));
+        listPoints.add(new Point(point.x + 1, point.y + 1));
+        for (Point myPoint : listPoints) {
+            if (myPoint.x < 0 || myPoint.x > this.getBoardColumn() - 1 || myPoint.y < 0 || myPoint.y > this.getBoardRow() - 1) {
+                continue;
+            } else {
+                neighbors.add(myPoint);
+            }
+        }
+        return neighbors;
+    }
+
+    public Map<String,Integer> getNeighborsState(List<Point> neighbors){
+        Map<String,Integer> neighborsState = new HashMap<>();
+        Integer lives = 0;
+        Integer dead = 0;
+
+        for(Point myPoint : neighbors){
+            if(this.getCellState(myPoint)){
+                lives++;
+            }else{
+                dead++;
+            }
+        }
+        neighborsState.put("LIVES", lives);
+        neighborsState.put("DEAD", dead);
+
+        return neighborsState;
+    }
+
+    public void initialBoardDead(){
+        for(Integer i = 0; i < this.getBoardColumn(); i++){
+            for(Integer j = 0; j < this.getBoardRow(); j++){
+                this.setCellState(new Point(i, j), false);
+            }
+        }
+    }
+
+    private void fillMapWithDead(){
         for(int i = 0; i < boardRow; i++) {
             for (int j = 0; j < boardColumn; j++) {
                 Cell cell = new Cell();
-                cell.setLive(false);
+                cell.setLive(Cell.DEAD);
                 boardCells.put(new Point(i, j), cell);
             }
         }
+    }
+
+    private void initialBoardPlanting(Integer initialSeeds){
+        Random random = new Random();
+        for(Integer row = 0; row < this.getBoardColumn(); row++){
+            for(Integer col = 0; col < this.getBoardRow(); col++){
+                if(initialSeeds > 0 && row > this.getBoardColumn()/3) {
+                    int randomNum = random.nextInt(100);
+                    if (randomNum > 50 && randomNum < 75) {
+                        this.setCellState(new Point(row, col), Cell.LIVE);
+                        initialSeeds--;
+                    }
+                }
+            }
+        }
+    }
+
+    public void printBoard(Integer iteration) throws InterruptedException {
+        int count = 0;
+        String state;
+        for(int i = 0; i < this.getBoardColumn(); i++) {
+            for (int j = 0; j < this.getBoardRow(); j++) {
+                if (this.getCellState(new Point(i, j))) {
+                    state = "#";
+                } else {
+                    state = ".";
+                }
+                System.out.print("" + state + "");
+                count++;
+                if (count == this.getBoardRow()) {
+                    System.out.print("\n");
+                    count = 0;
+                }
+            }
+        }
+        System.out.println("Iteración: " + iteration);
+        Thread.sleep(50);
     }
 }
