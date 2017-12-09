@@ -20,9 +20,16 @@ public class LifeGame {
 
     public void init(){
         this.board = new Board(boardRow, boardColumn);
+        board.initialBoardPlanting(boardRow);
         this.swapBoard = new Board(board.getBoardRow(), board.getBoardColumn());
+        swapBoard.initialBoardPlanting(board.getBoardRow());
 
-        while (1 < 2) {
+        iterate();
+    }
+
+    private void iterate(){
+
+        while (true) {
             System.out.print("\033[H\033[2J");
             System.out.flush();
             iteration++;
@@ -43,7 +50,7 @@ public class LifeGame {
                 computeNewStateAtPoint(point, neighborsState);
             }
         }
-        board.setBoardCells(swapBoard.getBoardCells());
+        board.setBoard(swapBoard.getBoard());
     }
 
     private Map<String, Integer> computeNeighborsStateAtCell(Point point){
@@ -56,6 +63,7 @@ public class LifeGame {
         if(board.getCellState(point) == Cell.LIVE){
             if(neighbors.get("LIVES").equals(2) ||
                     neighbors.get("LIVES").equals(3)){
+                swapBoard.setCellState(point, Cell.LIVE);
                 return;
             }else{
                 swapBoard.setCellState(point, Cell.DEAD);
@@ -66,6 +74,7 @@ public class LifeGame {
                 swapBoard.setCellState(point, Cell.LIVE);
                 return;
             } else {
+                swapBoard.setCellState(point, Cell.DEAD);
                 return;
             }
         }

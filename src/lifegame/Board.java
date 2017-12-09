@@ -6,17 +6,17 @@ import java.util.List;
 
 public class Board {
 
+    private Map<Point, Cell> board;
+
     private Integer boardRow;
     private Integer boardColumn;
 
-    private Map<Point, Cell> boardCells = new HashMap<>();
 
     public Board(Integer boardRow, Integer boardColumn) {
         this.boardRow = boardRow;
         this.boardColumn = boardColumn;
-        initialBoardDead();
-        fillMapWithDead();
-        initialBoardPlanting(boardRow);
+        board = new HashMap<>(this.getBoardRow(), this.getBoardColumn());
+        startBoardWithAllDead();
     }
 
     public Integer getBoardRow() {
@@ -35,22 +35,22 @@ public class Board {
         this.boardColumn = boardColumn;
     }
 
-    public Map<Point, Cell> getBoardCells() {
-        return boardCells;
+    public Map<Point, Cell> getBoard() {
+        return board;
     }
 
-    public void setBoardCells(Map<Point, Cell> boardCells) {
-        this.boardCells = boardCells;
+    public void setBoard(Map<Point, Cell> board) {
+        this.board = board;
     }
 
     public void setCellState(Point point, Boolean state){
         Cell cell = new Cell();
         cell.setLive(state);
-        boardCells.put(point, cell);
+        board.put(point, cell);
     }
 
     public Boolean getCellState(Point point){
-        return boardCells.get(point).getLive();
+        return board.get(point).getLive();
 
     }
 
@@ -73,14 +73,6 @@ public class Board {
                 neighbors.add(myPoint);
             }
         }
-//        if(point.x == 25 && point.y == 25){
-//            System.out.println(neighbors);
-//            try {
-//                Thread.sleep(100000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return neighbors;
     }
 
@@ -95,14 +87,6 @@ public class Board {
             }else{
                 dead++;
             }
-//            if(myPoint.x == 25 && myPoint.y == 80){
-//                System.out.println("LIVES = " + lives + ", DEAD = " + dead);
-//                try {
-//                    Thread.sleep(100000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
         }
         neighborsState.put("LIVES", lives);
         neighborsState.put("DEAD", dead);
@@ -110,25 +94,15 @@ public class Board {
         return neighborsState;
     }
 
-    public void initialBoardDead(){
+    public void startBoardWithAllDead(){
         for(Integer row = 0; row < this.getBoardRow(); row++){
             for(Integer col = 0; col < this.getBoardColumn(); col++){
-                this.setCellState(new Point(row, col), false);
+                this.setCellState(new Point(row, col), Cell.DEAD);
             }
         }
     }
 
-    private void fillMapWithDead(){
-        for(int row = 0; row < this.getBoardRow(); row++) {
-            for (int col = 0; col < this.getBoardColumn(); col++) {
-                Cell cell = new Cell();
-                cell.setLive(Cell.DEAD);
-                boardCells.put(new Point(row, col), cell);
-            }
-        }
-    }
-
-    private void initialBoardPlanting(Integer initialSeeds){
+    public void initialBoardPlanting(Integer initialSeeds){
         this.setCellState(new Point(25, 80), Cell.LIVE);
         this.setCellState(new Point(25, 81), Cell.LIVE);
         this.setCellState(new Point(26, 81), Cell.LIVE);
@@ -138,23 +112,29 @@ public class Board {
 
     public void printBoard(Integer iteration) throws InterruptedException {
         int count = 0;
+        int livesCount = 0;
+        int deadCount  = 0;
+
         String character;
         for(int row = 0; row < this.getBoardRow(); row++) {
             for (int col = 0; col < this.getBoardColumn(); col++) {
                 if (this.getCellState(new Point(row, col)) == Cell.LIVE) {
                     character = "#";
+                    livesCount++;
                 } else {
                     character = ".";
+                    deadCount++;
                 }
                 System.out.print(character);
                 count++;
                 if (count == this.getBoardColumn()) {
                     System.out.print("\n");
                     count = 0;
+
                 }
             }
         }
-        System.out.println("Iteración: " + iteration);
+        System.out.println("Iteración: " + iteration + "[LIVE: " + livesCount + ", DEAD: " + deadCount + "]");
         Thread.sleep(50);
     }
 }
