@@ -6,21 +6,21 @@ import java.util.List;
 
 public class LifeGame {
 
-    private Integer boardColumn;
     private Integer boardRow;
+    private Integer boardColumn;
     private Board board;
     private Board swapBoard;
     private Integer iteration = 0;
 
-    public LifeGame(Integer boardColumn, Integer boardRow) {
-        this.boardColumn = boardColumn;
+    public LifeGame(Integer boardRow, Integer boardColumn) {
         this.boardRow = boardRow;
+        this.boardColumn = boardColumn;
         init();
     }
 
     public void init(){
         this.board = new Board(boardRow, boardColumn);
-        this.swapBoard = new Board(board.getBoardColumn(), board.getBoardRow());
+        this.swapBoard = new Board(board.getBoardRow(), board.getBoardColumn());
 
         while (1 < 2) {
             System.out.print("\033[H\033[2J");
@@ -36,8 +36,8 @@ public class LifeGame {
     }
 
     private void setNextStateOfBoard() {
-        for(int row = 0; row < board.getBoardColumn(); row++ ){
-            for(int col = 0; col < board.getBoardRow(); col++ ){
+        for(int row = 0; row < board.getBoardRow(); row++ ){
+            for(int col = 0; col < board.getBoardColumn(); col++ ){
                 Point point = new Point(row, col);
                 Map<String, Integer> neighborsState = computeNeighborsStateAtCell(point);
                 computeNewStateAtPoint(point, neighborsState);
