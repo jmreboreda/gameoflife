@@ -8,7 +8,7 @@ public class LifeGame {
 
     private Integer boardRow;
     private Integer boardColumn;
-    private Board board;
+    private Board viewBoard;
     private Board swapBoard;
     private Integer iteration = 0;
 
@@ -19,10 +19,9 @@ public class LifeGame {
     }
 
     public void init(){
-        this.board = new Board(boardRow, boardColumn);
-        board.initialBoardPlanting(boardRow);
-        this.swapBoard = new Board(board.getBoardRow(), board.getBoardColumn());
-        swapBoard.initialBoardPlanting(board.getBoardRow());
+        this.viewBoard = new Board(boardRow, boardColumn);
+        viewBoard.initialBoardPlanting(boardRow);
+        this.swapBoard = new Board(boardRow, boardColumn);
 
         iterate();
     }
@@ -34,7 +33,7 @@ public class LifeGame {
             System.out.flush();
             iteration++;
             try {
-                board.printBoard(iteration);
+                viewBoard.printBoard(iteration);
                 setNextStateOfBoard();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -43,34 +42,29 @@ public class LifeGame {
     }
 
     private void setNextStateOfBoard() {
-        for(int row = 0; row < board.getBoardRow(); row++ ){
-            for(int col = 0; col < board.getBoardColumn(); col++ ){
+        for(int row = 0; row < viewBoard.getBoardRow(); row++ ){
+            for(int col = 0; col < viewBoard.getBoardColumn(); col++ ){
                 Point point = new Point(row, col);
-                Map<String, Integer> neighborsState = computeNeighborsStateAtCell(point);
+                List<Point> neighbors = viewBoard.getNeighbors(point);
+                Map<String, Integer> neighborsState = viewBoard.getNeighborsState(neighbors);
                 computeNewStateAtPoint(point, neighborsState);
             }
         }
-        board.setBoard(swapBoard.getBoard());
+        viewBoard.setBoard(swapBoard.getBoard());
     }
 
-    private Map<String, Integer> computeNeighborsStateAtCell(Point point){
-        List<Point> neighbors = board.getNeighbors(point);
-
-        return board.getNeighborsState(neighbors);
-    }
-
-    private void computeNewStateAtPoint(Point point, Map neighbors){
-        if(board.getCellState(point) == Cell.LIVE){
-            if(neighbors.get("LIVES").equals(2) ||
-                    neighbors.get("LIVES").equals(3)){
+    private void computeNewStateAtPoint(Point point, Map neighborsOfThePoint){
+        if(viewBoard.getCellState(point) == Cell.LIVE){
+            if(neighborsOfThePoint.get("LIVES").equals(2) ||
+                    neighborsOfThePoint.get("LIVES").equals(3)){
                 swapBoard.setCellState(point, Cell.LIVE);
                 return;
             }else{
                 swapBoard.setCellState(point, Cell.DEAD);
                 return;
             }
-        }else if(board.getCellState(point) == Cell.DEAD) {
-            if (neighbors.get("LIVES").equals(3)) {
+        }else if(viewBoard.getCellState(point) == Cell.DEAD) {
+            if (neighborsOfThePoint.get("LIVES").equals(3)) {
                 swapBoard.setCellState(point, Cell.LIVE);
                 return;
             } else {

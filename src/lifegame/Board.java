@@ -16,7 +16,7 @@ public class Board {
         this.boardRow = boardRow;
         this.boardColumn = boardColumn;
         board = new HashMap<>(this.getBoardRow(), this.getBoardColumn());
-        startBoardWithAllDead();
+        setAllCellDead();
     }
 
     public Integer getBoardRow() {
@@ -40,7 +40,12 @@ public class Board {
     }
 
     public void setBoard(Map<Point, Cell> board) {
-        this.board = board;
+        for(int i = 0; i < boardRow; i++){
+            for(int j = 0; j < boardColumn; j++){
+                Cell cell = board.get(new Point(i, j));
+                this.setCellState(new Point(i,j), cell.getLive());
+            }
+        }
     }
 
     public void setCellState(Point point, Boolean state){
@@ -76,12 +81,12 @@ public class Board {
         return neighbors;
     }
 
-    public Map<String,Integer> getNeighborsState(List<Point> neighbors){
+    public Map<String,Integer> getNeighborsState(List<Point> neighborsOfThePoint){
         Map<String,Integer> neighborsState = new HashMap<>();
         Integer lives = 0;
         Integer dead = 0;
 
-        for(Point myPoint : neighbors){
+        for(Point myPoint : neighborsOfThePoint){
             if(this.getCellState(myPoint) == Cell.LIVE){
                 lives++;
             }else{
@@ -94,7 +99,7 @@ public class Board {
         return neighborsState;
     }
 
-    public void startBoardWithAllDead(){
+    public void setAllCellDead(){
         for(Integer row = 0; row < this.getBoardRow(); row++){
             for(Integer col = 0; col < this.getBoardColumn(); col++){
                 this.setCellState(new Point(row, col), Cell.DEAD);
@@ -103,11 +108,12 @@ public class Board {
     }
 
     public void initialBoardPlanting(Integer initialSeeds){
+        //r-Pentomino
         this.setCellState(new Point(25, 80), Cell.LIVE);
         this.setCellState(new Point(25, 81), Cell.LIVE);
-        this.setCellState(new Point(26, 81), Cell.LIVE);
-        this.setCellState(new Point(26, 82), Cell.LIVE);
-        this.setCellState(new Point(27, 81), Cell.LIVE);
+        this.setCellState(new Point(26, 79), Cell.LIVE);
+        this.setCellState(new Point(26, 80), Cell.LIVE);
+        this.setCellState(new Point(27, 80), Cell.LIVE);
     }
 
     public void printBoard(Integer iteration) throws InterruptedException {
@@ -122,7 +128,7 @@ public class Board {
                     character = "#";
                     livesCount++;
                 } else {
-                    character = ".";
+                    character = " ";
                     deadCount++;
                 }
                 System.out.print(character);
@@ -130,11 +136,10 @@ public class Board {
                 if (count == this.getBoardColumn()) {
                     System.out.print("\n");
                     count = 0;
-
                 }
             }
         }
-        System.out.println("Iteración: " + iteration + "[LIVE: " + livesCount + ", DEAD: " + deadCount + "]");
-        Thread.sleep(50);
+        System.out.print("Iteración: " + iteration + " [LIVE: " + livesCount + ", DEAD: " + deadCount + "]");
+        Thread.sleep(25);
     }
 }
