@@ -71,13 +71,33 @@ public class Board {
         listPoints.add(new Point(point.x + 1, point.y - 1));
         listPoints.add(new Point(point.x + 1, point.y));
         listPoints.add(new Point(point.x + 1, point.y + 1));
+
+        // Init limited space
+
+
+
+
+
+
+        // end limited space
+
+        // Init toroide
         for (Point myPoint : listPoints) {
-            if (myPoint.x < 0 || myPoint.x > this.getBoardRow() - 1 || myPoint.y < 0 || myPoint.y > this.getBoardColumn() - 1) {
-                continue;
-            } else {
-                neighbors.add(myPoint);
+            if (myPoint.x < 0){
+                myPoint.x = myPoint.x + this.getBoardRow();
             }
+            if(myPoint.x > this.getBoardRow() - 1){
+                myPoint.x = 0;
+            }
+            if(myPoint.y < 0){
+                myPoint.y =myPoint.y + this.getBoardColumn();
+            }
+            if(myPoint.y > this.getBoardColumn() - 1) {
+                myPoint.y = 0;
+            }
+            neighbors.add(myPoint);
         }
+        // End toroide
         return neighbors;
     }
 
@@ -109,11 +129,17 @@ public class Board {
 
     public void initialBoardPlanting(Integer initialSeeds){
         //r-Pentomino
-        this.setCellState(new Point(25, 80), Cell.LIVE);
-        this.setCellState(new Point(25, 81), Cell.LIVE);
-        this.setCellState(new Point(26, 79), Cell.LIVE);
-        this.setCellState(new Point(26, 80), Cell.LIVE);
-        this.setCellState(new Point(27, 80), Cell.LIVE);
+        this.setCellState(new Point(15, 80), Cell.LIVE);
+        this.setCellState(new Point(15, 81), Cell.LIVE);
+        this.setCellState(new Point(16, 79), Cell.LIVE);
+        this.setCellState(new Point(16, 80), Cell.LIVE);
+        this.setCellState(new Point(17, 80), Cell.LIVE);
+        // New
+//        this.setCellState(new Point(30, 80), Cell.LIVE);
+//        this.setCellState(new Point(30, 81), Cell.LIVE);
+//        this.setCellState(new Point(31, 79), Cell.LIVE);
+//        this.setCellState(new Point(31, 80), Cell.LIVE);
+//        this.setCellState(new Point(32, 80), Cell.LIVE);
     }
 
     public void printBoard(Integer iteration) throws InterruptedException {
@@ -140,6 +166,6 @@ public class Board {
             }
         }
         System.out.print("Iteración: " + iteration + " [LIVE: " + livesCount + ", DEAD: " + deadCount + "]");
-        Thread.sleep(25);
+        Thread.sleep(20);
     }
 }
