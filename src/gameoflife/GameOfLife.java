@@ -10,18 +10,20 @@ public class GameOfLife {
     private Integer boardColumn;
     private Board viewBoard;
     private Board swapBoard;
+    private String gameType;
     private Integer iteration = 0;
 
-    public GameOfLife(Integer boardRow, Integer boardColumn) {
+    public GameOfLife(String gameType, Integer boardRow, Integer boardColumn) {
         this.boardRow = boardRow;
         this.boardColumn = boardColumn;
+        this.gameType = gameType;
         init();
     }
 
     public void init(){
-        this.viewBoard = new Board(boardRow, boardColumn);
+        this.viewBoard = new Board(gameType, boardRow, boardColumn);
         viewBoard.initialBoardPlanting(boardRow);
-        this.swapBoard = new Board(boardRow, boardColumn);
+        this.swapBoard = new Board(gameType, boardRow, boardColumn);
 
         iterate();
     }

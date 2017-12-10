@@ -10,11 +10,13 @@ public class Board {
 
     private Integer boardRow;
     private Integer boardColumn;
+    private String gameType;
 
 
-    public Board(Integer boardRow, Integer boardColumn) {
+    public Board(String gameType, Integer boardRow, Integer boardColumn) {
         this.boardRow = boardRow;
         this.boardColumn = boardColumn;
+        this.gameType = gameType;
         board = new HashMap<>(this.getBoardRow(), this.getBoardColumn());
         setAllCellDead();
     }
@@ -72,34 +74,32 @@ public class Board {
         listPoints.add(new Point(point.x + 1, point.y));
         listPoints.add(new Point(point.x + 1, point.y + 1));
 
-        // Init limited space
-//        for (Point myPoint : listPoints) {
-//            if (myPoint.x < 0 || myPoint.x > this.getBoardRow() - 1 || myPoint.y < 0 || myPoint.y > this.getBoardColumn() - 1) {
-//                continue;
-//            } else {
-//                neighbors.add(myPoint);
-//            }
-//        }
-        // end limited space
-
-        // Init toroide
+        if(this.gameType.equals("plano")) {
         for (Point myPoint : listPoints) {
-            if (myPoint.x < 0){
-                myPoint.x = myPoint.x + this.getBoardRow();
+            if (myPoint.x < 0 || myPoint.x > this.getBoardRow() - 1
+                    || myPoint.y < 0 || myPoint.y > this.getBoardColumn() - 1) {
+                continue;
+            } else {
+                neighbors.add(myPoint);
+                }
             }
-            if(myPoint.x > this.getBoardRow() - 1){
-                myPoint.x = 0;
+        } else if(this.gameType.equals("toro")) {
+            for (Point myPoint : listPoints) {
+                if (myPoint.x < 0) {
+                    myPoint.x = myPoint.x + this.getBoardRow();
+                }
+                if (myPoint.x > this.getBoardRow() - 1) {
+                    myPoint.x = 0;
+                }
+                if (myPoint.y < 0) {
+                    myPoint.y = myPoint.y + this.getBoardColumn();
+                }
+                if (myPoint.y > this.getBoardColumn() - 1) {
+                    myPoint.y = 0;
+                }
+                neighbors.add(myPoint);
             }
-            if(myPoint.y < 0){
-                myPoint.y =myPoint.y + this.getBoardColumn();
-            }
-            if(myPoint.y > this.getBoardColumn() - 1) {
-                myPoint.y = 0;
-            }
-            neighbors.add(myPoint);
         }
-        // End toroide
-
         return neighbors;
     }
 
@@ -136,7 +136,7 @@ public class Board {
         this.setCellState(new Point(16, 79), Cell.LIVE);
         this.setCellState(new Point(16, 80), Cell.LIVE);
         this.setCellState(new Point(17, 80), Cell.LIVE);
-        // New
+        // New r-Pentomino
 //        this.setCellState(new Point(30, 80), Cell.LIVE);
 //        this.setCellState(new Point(30, 81), Cell.LIVE);
 //        this.setCellState(new Point(31, 79), Cell.LIVE);
@@ -168,6 +168,6 @@ public class Board {
             }
         }
         System.out.print("Iteración: " + iteration + " [LIVE: " + livesCount + ", DEAD: " + deadCount + "]");
-        Thread.sleep(20);
+        Thread.sleep(10);
     }
 }

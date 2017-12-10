@@ -2,10 +2,15 @@ package gameoflife;
 
 public class App {
 
-    private static final Integer boardRow = 55;
-    private static final Integer boardColumn = 160;
-
     public static void main(String[] args){
-        new GameOfLife(boardRow, boardColumn);
+        if (args.length != 3 || (!args[0].equals("toro") && !args[0].equals("plano"))) {
+            System.out.println("GoL - Parámetros: toro/plano filas columnas");
+        } else {
+            String gameType = args[0];
+            Integer row = Integer.parseInt(args[1]);
+            Integer col = Integer.parseInt(args[2]);
+
+            new GameOfLife(gameType, row, col);
+        }
     }
 }
