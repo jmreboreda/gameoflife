@@ -1,4 +1,4 @@
-package lifegame;
+package gameoflife;
 
 import java.awt.*;
 import java.util.*;
@@ -73,12 +73,13 @@ public class Board {
         listPoints.add(new Point(point.x + 1, point.y + 1));
 
         // Init limited space
-
-
-
-
-
-
+//        for (Point myPoint : listPoints) {
+//            if (myPoint.x < 0 || myPoint.x > this.getBoardRow() - 1 || myPoint.y < 0 || myPoint.y > this.getBoardColumn() - 1) {
+//                continue;
+//            } else {
+//                neighbors.add(myPoint);
+//            }
+//        }
         // end limited space
 
         // Init toroide
@@ -98,6 +99,7 @@ public class Board {
             neighbors.add(myPoint);
         }
         // End toroide
+
         return neighbors;
     }
 

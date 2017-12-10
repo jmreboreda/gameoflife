@@ -1,4 +1,4 @@
-package lifegame;
+package gameoflife;
 
 public class Cell {
 

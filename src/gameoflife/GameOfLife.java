@@ -1,10 +1,10 @@
-package lifegame;
+package gameoflife;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class LifeGame {
+public class GameOfLife {
 
     private Integer boardRow;
     private Integer boardColumn;
@@ -12,7 +12,7 @@ public class LifeGame {
     private Board swapBoard;
     private Integer iteration = 0;
 
-    public LifeGame(Integer boardRow, Integer boardColumn) {
+    public GameOfLife(Integer boardRow, Integer boardColumn) {
         this.boardRow = boardRow;
         this.boardColumn = boardColumn;
         init();
