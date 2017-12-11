@@ -1,6 +1,7 @@
 package gameoflife;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public class Board {
     private Integer boardRow;
     private Integer boardColumn;
     private String gameType;
+    private final String os = System.getProperty("os.name").toLowerCase();
+
 
 
     public Board(String gameType, Integer boardRow, Integer boardColumn) {
@@ -145,6 +148,22 @@ public class Board {
     }
 
     public void printBoard(Integer iteration) throws InterruptedException {
+        if (os.contains("windows")) {
+            try {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                Runtime.getRuntime().exec("clear");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         int count = 0;
         int livesCount = 0;
         int deadCount  = 0;
@@ -168,6 +187,6 @@ public class Board {
             }
         }
         System.out.print("Iteración: " + iteration + " [LIVE: " + livesCount + ", DEAD: " + deadCount + "]");
-        Thread.sleep(10);
+        //Thread.sleep(10);
     }
 }

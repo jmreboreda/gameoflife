@@ -1,6 +1,7 @@
 package gameoflife;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class GameOfLife {
     private void iterate(){
 
         while (true) {
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+//            System.out.print("\033[H\033[2J");
+//            System.out.flush();
             iteration++;
             try {
                 viewBoard.printBoard(iteration);
