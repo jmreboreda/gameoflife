@@ -1,7 +1,6 @@
 package gameoflife;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -50,16 +49,16 @@ public class GameOfLife {
                 Point point = new Point(row, col);
                 List<Point> neighbors = viewBoard.getNeighbors(point);
                 Map<String, Integer> neighborsState = viewBoard.getNeighborsState(neighbors);
-                computeNewStateAtPoint(point, neighborsState);
+                setNextStateForPoint(point, neighborsState);
             }
         }
         viewBoard.setBoard(swapBoard.getBoard());
     }
 
-    private void computeNewStateAtPoint(Point point, Map neighborsOfThePoint){
+    private void setNextStateForPoint(Point point, Map neighborsStateOfPoint){
         if(viewBoard.getCellState(point) == Cell.LIVE){
-            if(neighborsOfThePoint.get("LIVES").equals(2) ||
-                    neighborsOfThePoint.get("LIVES").equals(3)){
+            if(neighborsStateOfPoint.get("LIVES").equals(2) ||
+                    neighborsStateOfPoint.get("LIVES").equals(3)){
                 swapBoard.setCellState(point, Cell.LIVE);
                 return;
             }else{
@@ -67,7 +66,7 @@ public class GameOfLife {
                 return;
             }
         }else if(viewBoard.getCellState(point) == Cell.DEAD) {
-            if (neighborsOfThePoint.get("LIVES").equals(3)) {
+            if (neighborsStateOfPoint.get("LIVES").equals(3)) {
                 swapBoard.setCellState(point, Cell.LIVE);
                 return;
             } else {
