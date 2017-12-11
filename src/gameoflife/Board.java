@@ -2,8 +2,10 @@ package gameoflife;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Board {
 
@@ -168,14 +170,18 @@ public class Board {
         int livesCount = 0;
         int deadCount  = 0;
 
+        char escCode = 0x1B;
+        int iRow = 0; int iColumn = 0;
+        System.out.print(String.format("%c[%d;%df",escCode,iRow,iColumn));
+
         String character;
         for(int row = 0; row < this.getBoardRow(); row++) {
             for (int col = 0; col < this.getBoardColumn(); col++) {
                 if (this.getCellState(new Point(row, col)) == Cell.LIVE) {
-                    character = "#";
+                    character = "\u25A0";
                     livesCount++;
                 } else {
-                    character = " ";
+                    character = " ";//"\u00B7";
                     deadCount++;
                 }
                 System.out.print(character);
@@ -186,7 +192,9 @@ public class Board {
                 }
             }
         }
+        int row = this.getBoardRow() + 1; int column = 0;
+        System.out.print(String.format("%c[%d;%df",escCode,row,column));
         System.out.print("Iteración: " + iteration + " [LIVE: " + livesCount + ", DEAD: " + deadCount + "]");
-        //Thread.sleep(10);
+        Thread.sleep(10);
     }
 }
