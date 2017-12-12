@@ -69,18 +69,18 @@ public class Board {
     public java.util.List<Point> getNeighbors(Point point) {
         List<Point> neighbors = new ArrayList<>();
 
-        List<Point> listPoints = new ArrayList<>();
-        listPoints.add(new Point(point.x - 1, point.y - 1));
-        listPoints.add(new Point(point.x - 1, point.y));
-        listPoints.add(new Point(point.x - 1, point.y + 1));
-        listPoints.add(new Point(point.x, point.y - 1));
-        listPoints.add(new Point(point.x, point.y + 1));
-        listPoints.add(new Point(point.x + 1, point.y - 1));
-        listPoints.add(new Point(point.x + 1, point.y));
-        listPoints.add(new Point(point.x + 1, point.y + 1));
+        List<Point> neighborsLocation = new ArrayList<>();
+        neighborsLocation.add(new Point(point.x - 1, point.y - 1));
+        neighborsLocation.add(new Point(point.x - 1, point.y));
+        neighborsLocation.add(new Point(point.x - 1, point.y + 1));
+        neighborsLocation.add(new Point(point.x, point.y - 1));
+        neighborsLocation.add(new Point(point.x, point.y + 1));
+        neighborsLocation.add(new Point(point.x + 1, point.y - 1));
+        neighborsLocation.add(new Point(point.x + 1, point.y));
+        neighborsLocation.add(new Point(point.x + 1, point.y + 1));
 
         if(this.gameType.equals("plano")) {
-        for (Point myPoint : listPoints) {
+        for (Point myPoint : neighborsLocation) {
             if (myPoint.x < 0 || myPoint.x > this.getBoardRow() - 1
                     || myPoint.y < 0 || myPoint.y > this.getBoardColumn() - 1) {
                 continue;
@@ -89,7 +89,7 @@ public class Board {
                 }
             }
         } else if(this.gameType.equals("toro")) {
-            for (Point myPoint : listPoints) {
+            for (Point myPoint : neighborsLocation) {
                 if (myPoint.x < 0) {
                     myPoint.x = myPoint.x + this.getBoardRow();
                 }
@@ -136,11 +136,13 @@ public class Board {
 
     public void initialBoardPlanting(Integer initialSeeds){
         //r-Pentomino
-        this.setCellState(new Point(15, 80), Cell.LIVE);
-        this.setCellState(new Point(15, 81), Cell.LIVE);
-        this.setCellState(new Point(16, 79), Cell.LIVE);
-        this.setCellState(new Point(16, 80), Cell.LIVE);
-        this.setCellState(new Point(17, 80), Cell.LIVE);
+        Integer x = this.getBoardRow()/2;
+        Integer y = this.getBoardColumn()/2;
+        this.setCellState(new Point(x, y), Cell.LIVE);
+        this.setCellState(new Point(x, y+1), Cell.LIVE);
+        this.setCellState(new Point(x+1, y-1), Cell.LIVE);
+        this.setCellState(new Point(x+1, y), Cell.LIVE);
+        this.setCellState(new Point(x+2, y), Cell.LIVE);
         // New r-Pentomino
 //        this.setCellState(new Point(30, 80), Cell.LIVE);
 //        this.setCellState(new Point(30, 81), Cell.LIVE);
